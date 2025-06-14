@@ -5,6 +5,7 @@ import 'package:malina_test_app/features/favorites/view/favorites_screen.dart';
 import 'package:malina_test_app/features/home/view/home_screen.dart';
 import 'package:malina_test_app/features/login/view/login_screen.dart';
 import 'package:malina_test_app/features/profile/view/profile_screen.dart';
+import 'package:malina_test_app/features/qr/view/qr_page.dart';
 import 'package:malina_test_app/features/shell/shell_page.dart';
 
 final GoRouter router = GoRouter(
@@ -13,6 +14,10 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: AppRouterConstants.login,
       builder: (context, state) => const LoginScreen(),
+    ),
+    GoRoute(
+      path: AppRouterConstants.qr,
+      builder: (context, state) => const QrPage(),
     ),
     ShellRoute(
       builder: (context, state, child) {

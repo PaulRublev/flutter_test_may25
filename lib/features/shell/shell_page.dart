@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:malina_test_app/core/constants/app_colors.dart';
 import 'package:malina_test_app/core/constants/app_router_constants.dart';
 
 class ShellPage extends StatelessWidget {
@@ -16,6 +17,7 @@ class ShellPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String location = GoRouterState.of(context).fullPath ?? '';
+    final bool isHomeRoot = location == AppRouterConstants.home;
     final int currentIndex =
         location.isEmpty
             ? 0
@@ -23,23 +25,111 @@ class ShellPage extends StatelessWidget {
 
     return Scaffold(
       body: child,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: (index) {
-          context.go(_tabs[index]);
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favorites',
+      bottomNavigationBar: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
+        ),
+        child: Container(
+          height: 80,
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.black.withValues(alpha: 0.1),
+                blurRadius: 10,
+                offset: Offset(0, -2),
+              ),
+            ],
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Cart',
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: List.generate(5, (index) {
+              if (index == 2) {
+                return GestureDetector(
+                  onTap: () {
+                    if (isHomeRoot) {
+                      context.push('/qr');
+                    } else {
+                      if (Navigator.of(context).canPop()) {
+                        context.pop();
+                      } else {
+                        context.go(AppRouterConstants.home);
+                      }
+                    }
+                  },
+                  child: Container(
+                    height: 60,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.malina,
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.malina.withValues(alpha: 0.3),
+                          blurRadius: 8,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      isHomeRoot ? Icons.qr_code : Icons.close,
+                      color: Colors.white,
+                    ),
+                  ),
+                );
+              }
+
+              final itemIndex = index > 2 ? index - 1 : index;
+              final iconData =
+                  [
+                    Icons.home,
+                    Icons.favorite,
+                    Icons.person,
+                    Icons.shopping_cart,
+                  ][itemIndex];
+              final label = ['Home', 'Favorites', 'Profile', 'Cart'][itemIndex];
+              final route = _tabs[itemIndex];
+
+              final isSelected = currentIndex == itemIndex;
+
+              return GestureDetector(
+                onTap: () => context.go(route),
+                behavior: HitTestBehavior.opaque,
+                child: Container(
+                  height: 60,
+                  width: 60,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        iconData,
+                        color:
+                            isSelected
+                                ? AppColors.malina
+                                : AppColors.unselected,
+                      ),
+                      Text(
+                        label,
+                        style: TextStyle(
+                          color:
+                              isSelected
+                                  ? AppColors.malina
+                                  : AppColors.unselected,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
           ),
-        ],
+        ),
       ),
     );
   }
