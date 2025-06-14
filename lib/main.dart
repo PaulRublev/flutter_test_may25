@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:malina_test_app/app/app.dart';
+import 'package:malina_test_app/core/di/service_locator.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await setupLocator();
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp();
-  }
+  runApp(const App());
 }
