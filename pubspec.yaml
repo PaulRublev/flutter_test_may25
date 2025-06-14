@@ -95,8 +95,8 @@ flutter:
   fonts:
     - family: WixMadeforDisplay
       fonts:
-        - asset: fonts/WixMadeforDisplay-SemiBold.ttf
-        - asset: fonts/WixMadeforDisplay-Regular.ttf
-        - asset: fonts/WixMadeforDisplay-Bold.ttf
-        - asset: fonts/WixMadeforDisplay-Medium.ttf
-        - asset: fonts/WixMadeforDisplay-ExtraBold.ttf
+        - asset: assets/fonts/WixMadeforDisplay-SemiBold.ttf
+        - asset: assets/fonts/WixMadeforDisplay-Regular.ttf
+        - asset: assets/fonts/WixMadeforDisplay-Bold.ttf
+        - asset: assets/fonts/WixMadeforDisplay-Medium.ttf
+        - asset: assets/fonts/WixMadeforDisplay-ExtraBold.ttf
