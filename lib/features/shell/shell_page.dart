@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:malina_test_app/core/constants/app_colors.dart';
 import 'package:malina_test_app/core/constants/app_icons.dart';
 import 'package:malina_test_app/core/constants/app_router_constants.dart';
+import 'package:malina_test_app/core/enums/categories.dart';
 import 'package:malina_test_app/features/shell/widgets/mini_button.dart';
 
 final GlobalKey _cartKey = GlobalKey();
@@ -104,6 +105,7 @@ class ShellPage extends StatelessWidget {
             return GestureDetector(
               onTap: () {
                 if (itemIndex == 3) {
+                  if (isSelected) return;
                   final overlay = Overlay.of(context);
                   final renderBox =
                       _cartKey.currentContext!.findRenderObject() as RenderBox;
@@ -140,18 +142,22 @@ class ShellPage extends StatelessWidget {
                                     children: [
                                       MiniButton(
                                         icon: AppIcons.foodIcon,
-                                        label: 'Еда',
+                                        label: Categories.food.title,
                                         onTap: () {
                                           entry.remove();
-                                          context.go(AppRouterConstants.cart);
+                                          context.go(
+                                            '${AppRouterConstants.cart}?category=food',
+                                          );
                                         },
                                       ),
                                       MiniButton(
                                         icon: AppIcons.beautyIcon,
-                                        label: 'Бьюти',
+                                        label: Categories.beauty.title,
                                         onTap: () {
                                           entry.remove();
-                                          context.go(AppRouterConstants.cart);
+                                          context.go(
+                                            '${AppRouterConstants.cart}?category=beauty',
+                                          );
                                         },
                                       ),
                                     ],

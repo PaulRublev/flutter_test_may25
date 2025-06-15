@@ -1,5 +1,8 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:malina_test_app/core/constants/app_router_constants.dart';
+import 'package:malina_test_app/core/enums/categories.dart';
+import 'package:malina_test_app/features/cart/cubit/current_category_cubit.dart';
 import 'package:malina_test_app/features/cart/view/cart_screen.dart';
 import 'package:malina_test_app/features/favorites/view/favorites_screen.dart';
 import 'package:malina_test_app/features/home/view/home_screen.dart';
@@ -34,7 +37,25 @@ final GoRouter router = GoRouter(
         ),
         GoRoute(
           path: AppRouterConstants.cart,
-          builder: (context, state) => const CartScreen(),
+          builder:
+              (context, state) => MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (context) {
+                      Categories category;
+                      try {
+                        category = Categories.values.byName(
+                          state.uri.queryParameters['category'] ?? '',
+                        );
+                      } catch (e) {
+                        category = Categories.food;
+                      }
+                      return CurrentCategoryCubit(initialCategory: category);
+                    },
+                  ),
+                ],
+                child: CartScreen(),
+              ),
         ),
         GoRoute(
           path: AppRouterConstants.favorites,

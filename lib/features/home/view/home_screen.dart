@@ -4,6 +4,7 @@ import 'package:malina_test_app/core/constants/app_colors.dart';
 import 'package:malina_test_app/core/constants/app_icons.dart';
 import 'package:malina_test_app/core/constants/app_images.dart';
 import 'package:malina_test_app/core/constants/app_text_styles.dart';
+import 'package:malina_test_app/core/enums/categories.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -104,7 +105,7 @@ class HomeScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Еда',
+                        Categories.food.title,
                         style: AppTextStyles.s22.copyWith(
                           color: AppColors.black,
                         ),
@@ -140,7 +141,7 @@ class HomeScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Бьюти',
+                        Categories.beauty.title,
                         style: AppTextStyles.s22.copyWith(
                           color: AppColors.black,
                         ),
