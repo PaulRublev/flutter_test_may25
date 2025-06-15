@@ -111,6 +111,7 @@ class _CartProductsWidgetState extends State<CartProductsWidget> {
                           Expanded(
                             child: Text(
                               widget.products[index].description,
+                              maxLines: 3,
                               style: AppTextStyles.r12.copyWith(
                                 color: AppColors.grey,
                                 overflow: TextOverflow.ellipsis,

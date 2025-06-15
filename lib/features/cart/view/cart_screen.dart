@@ -27,14 +27,6 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
     final categoryCubit = context.read<CurrentCategoryCubit>();
     final currentCategory = context.watch<CurrentCategoryCubit>().state;
 
-    final Product product = Product(
-      name: 'name2',
-      category: Categories.food,
-      price: 111,
-      subCategory: 'subCategory2',
-      description: 'description',
-    );
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Корзина'),
@@ -126,13 +118,10 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
         child: FloatingActionButton(
           backgroundColor: Color(0xFFECE6F0),
           child: const Icon(Icons.add),
-          onPressed: () {
-            context.read<CartCubit>().addToCart(
-              product.copyWith(category: currentCategory),
-            );
-          },
-          // TODO: add product
-          // onPressed: () => context.go(AppRouterConstants.addProduct),
+          onPressed:
+              () => context.push(
+                '${AppRouterConstants.addProduct}?category=${currentCategory.name}',
+              ),
         ),
       ),
     );

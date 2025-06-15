@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:malina_test_app/core/constants/app_router_constants.dart';
 import 'package:malina_test_app/core/enums/categories.dart';
 import 'package:malina_test_app/features/cart/cubit/current_category_cubit.dart';
+import 'package:malina_test_app/features/cart/view/add_product_screen.dart';
 import 'package:malina_test_app/features/cart/view/cart_screen.dart';
 import 'package:malina_test_app/features/favorites/view/favorites_screen.dart';
 import 'package:malina_test_app/features/home/view/home_screen.dart';
@@ -21,6 +22,21 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: AppRouterConstants.qr,
       builder: (context, state) => const QrPage(),
+    ),
+    GoRoute(
+      path: AppRouterConstants.addProduct,
+      builder: (context, state) {
+        Categories category;
+        try {
+          category = Categories.values.byName(
+            state.uri.queryParameters['category'] ?? '',
+          );
+        } catch (e) {
+          category = Categories.food;
+        }
+
+        return AddProductScreen(category: category);
+      },
     ),
     ShellRoute(
       builder: (context, state, child) {
