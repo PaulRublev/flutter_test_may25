@@ -157,9 +157,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 SizedBox(height: 24),
-
                 MalinaButton(
                   onPressed: () {
+                    // if (key.currentState!.validate()) {
+                    //   // TODO: save user if not exist, check password if exist
+                    //   context.go(AppRouterConstants.home);
+                    // }
                     context.go(AppRouterConstants.home);
                   },
                   child: Text(

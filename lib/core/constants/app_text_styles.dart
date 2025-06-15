@@ -8,5 +8,6 @@ abstract class AppTextStyles {
   static const r16 = TextStyle(fontSize: 16, fontWeight: FontWeight.normal);
   static const m10 = TextStyle(fontSize: 10, fontWeight: FontWeight.w500);
   static const m16 = TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
+  static const m17 = TextStyle(fontSize: 17, fontWeight: FontWeight.w500);
   static const s22 = TextStyle(fontSize: 22, fontWeight: FontWeight.w600);
 }

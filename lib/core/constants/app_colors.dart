@@ -7,4 +7,5 @@ abstract class AppColors {
   static const primary500 = Color(0xFFFFECEC);
   static const white = Colors.white;
   static const black = Colors.black;
+  static const scaffold = Color(0xFFFAFAFB);
 }
