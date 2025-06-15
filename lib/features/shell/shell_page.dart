@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:malina_test_app/core/constants/app_colors.dart';
 import 'package:malina_test_app/core/constants/app_icons.dart';
 import 'package:malina_test_app/core/constants/app_router_constants.dart';
-import 'package:malina_test_app/core/constants/app_text_styles.dart';
+import 'package:malina_test_app/features/shell/widgets/mini_button.dart';
 
 final GlobalKey _cartKey = GlobalKey();
 
@@ -128,25 +128,17 @@ class ShellPage extends StatelessWidget {
                                 ),
                                 color: Colors.white,
                                 child: Container(
-                                  // width: 70,
                                   padding: const EdgeInsets.only(bottom: 10),
                                   decoration: BoxDecoration(
                                     color: AppColors.white,
                                     borderRadius: BorderRadius.vertical(
                                       top: Radius.circular(50),
                                     ),
-                                    // boxShadow: [
-                                    //   BoxShadow(
-                                    //     color: Colors.black.withOpacity(0.1),
-                                    //     blurRadius: 10,
-                                    //     offset: Offset(0, 4),
-                                    //   ),
-                                    // ],
                                   ),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      _MiniButton(
+                                      MiniButton(
                                         icon: AppIcons.foodIcon,
                                         label: 'Еда',
                                         onTap: () {
@@ -154,7 +146,7 @@ class ShellPage extends StatelessWidget {
                                           context.go(AppRouterConstants.cart);
                                         },
                                       ),
-                                      _MiniButton(
+                                      MiniButton(
                                         icon: AppIcons.beautyIcon,
                                         label: 'Бьюти',
                                         onTap: () {
@@ -227,41 +219,6 @@ class ShellPage extends StatelessWidget {
               ),
             );
           }),
-        ),
-      ),
-    );
-  }
-}
-
-class _MiniButton extends StatelessWidget {
-  final String icon;
-  final String label;
-  final VoidCallback onTap;
-
-  const _MiniButton({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 60,
-        width: 60,
-        margin: const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          color: AppColors.greyBackground,
-          shape: BoxShape.circle,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(icon, width: 20, height: 20),
-            Text(label, style: AppTextStyles.r10, textAlign: TextAlign.center),
-          ],
         ),
       ),
     );
