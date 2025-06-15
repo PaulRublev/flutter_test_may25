@@ -11,6 +11,7 @@ class App extends StatelessWidget {
       routerConfig: router,
       theme: ThemeData(
         scaffoldBackgroundColor: AppColors.scaffold,
+        appBarTheme: const AppBarTheme(backgroundColor: AppColors.scaffold),
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,

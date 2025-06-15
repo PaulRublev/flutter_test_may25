@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:malina_test_app/core/constants/app_colors.dart';
+import 'package:malina_test_app/core/constants/app_icons.dart';
 import 'package:malina_test_app/core/constants/app_router_constants.dart';
+import 'package:malina_test_app/core/constants/app_text_styles.dart';
+
+final GlobalKey _cartKey = GlobalKey();
 
 class ShellPage extends StatelessWidget {
   final Widget child;
@@ -24,97 +29,190 @@ class ShellPage extends StatelessWidget {
             : _tabs.indexWhere((path) => location.startsWith(path));
 
     return Scaffold(
+      extendBody: true,
+      backgroundColor: Colors.transparent,
       body: child,
-      bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(24),
-        ),
-        child: Container(
-          height: 80,
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.black.withValues(alpha: 0.1),
-                blurRadius: 10,
-                offset: Offset(0, -2),
-              ),
-            ],
+      bottomNavigationBar: Container(
+        height: 80,
+        margin: const EdgeInsets.only(top: 6),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: List.generate(5, (index) {
-              if (index == 2) {
-                return GestureDetector(
-                  onTap: () {
-                    if (isHomeRoot) {
-                      context.push('/qr');
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.black.withValues(alpha: 0.15),
+              blurRadius: 10,
+              offset: Offset(0, -2),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: List.generate(5, (index) {
+            if (index == 2) {
+              return GestureDetector(
+                onTap: () {
+                  if (isHomeRoot) {
+                    context.push('/qr');
+                  } else {
+                    if (Navigator.of(context).canPop()) {
+                      context.pop();
                     } else {
-                      if (Navigator.of(context).canPop()) {
-                        context.pop();
-                      } else {
-                        context.go(AppRouterConstants.home);
-                      }
+                      context.go(AppRouterConstants.home);
                     }
-                  },
-                  child: Container(
+                  }
+                },
+                child: Container(
+                  height: 60,
+                  width: 60,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.malina,
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.malina.withValues(alpha: 0.3),
+                        blurRadius: 8,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: SvgPicture.asset(
+                    isHomeRoot ? AppIcons.main : AppIcons.mainBack,
+                  ),
+                ),
+              );
+            }
+
+            final itemIndex = index > 2 ? index - 1 : index;
+            final iconData =
+                [
+                  AppIcons.home,
+                  AppIcons.favorite,
+                  AppIcons.profile,
+                  AppIcons.cart,
+                ][itemIndex];
+            final label =
+                ['Лента', 'Избранное', 'Профиль', 'Корзина'][itemIndex];
+            final route = _tabs[itemIndex];
+
+            final isSelected = currentIndex == itemIndex;
+
+            return GestureDetector(
+              onTap: () {
+                if (itemIndex == 3) {
+                  final overlay = Overlay.of(context);
+                  final renderBox =
+                      _cartKey.currentContext!.findRenderObject() as RenderBox;
+                  final offset = renderBox.localToGlobal(Offset.zero);
+                  final size = renderBox.size;
+
+                  late OverlayEntry entry;
+
+                  entry = OverlayEntry(
+                    builder: (context) {
+                      return GestureDetector(
+                        onTap: () => entry.remove(),
+                        behavior: HitTestBehavior.opaque,
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              left: offset.dx + size.width / 2 - 35,
+                              top: offset.dy - 145,
+                              child: Material(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(50),
+                                ),
+                                color: Colors.white,
+                                child: Container(
+                                  // width: 70,
+                                  padding: const EdgeInsets.only(bottom: 10),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.white,
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(50),
+                                    ),
+                                    // boxShadow: [
+                                    //   BoxShadow(
+                                    //     color: Colors.black.withOpacity(0.1),
+                                    //     blurRadius: 10,
+                                    //     offset: Offset(0, 4),
+                                    //   ),
+                                    // ],
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      _MiniButton(
+                                        icon: AppIcons.foodIcon,
+                                        label: 'Еда',
+                                        onTap: () {
+                                          entry.remove();
+                                          context.go(AppRouterConstants.cart);
+                                        },
+                                      ),
+                                      _MiniButton(
+                                        icon: AppIcons.beautyIcon,
+                                        label: 'Бьюти',
+                                        onTap: () {
+                                          entry.remove();
+                                          context.go(AppRouterConstants.cart);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+
+                  overlay.insert(entry);
+                } else {
+                  context.go(route);
+                }
+              },
+              behavior: HitTestBehavior.opaque,
+              child: Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    key: itemIndex == 3 ? _cartKey : null,
                     height: 60,
                     width: 60,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: AppColors.malina,
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.malina.withValues(alpha: 0.3),
-                          blurRadius: 8,
-                          offset: Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Icon(
-                      isHomeRoot ? Icons.qr_code : Icons.close,
                       color: Colors.white,
                     ),
-                  ),
-                );
-              }
-
-              final itemIndex = index > 2 ? index - 1 : index;
-              final iconData =
-                  [
-                    Icons.home,
-                    Icons.favorite,
-                    Icons.person,
-                    Icons.shopping_cart,
-                  ][itemIndex];
-              final label = ['Home', 'Favorites', 'Profile', 'Cart'][itemIndex];
-              final route = _tabs[itemIndex];
-
-              final isSelected = currentIndex == itemIndex;
-
-              return GestureDetector(
-                onTap: () => context.go(route),
-                behavior: HitTestBehavior.opaque,
-                child: Container(
-                  height: 60,
-                  width: 60,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        iconData,
-                        color:
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          iconData,
+                          colorFilter: ColorFilter.mode(
                             isSelected
                                 ? AppColors.malina
                                 : AppColors.unselected,
-                      ),
-                      Text(
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 6,
+                    child: Center(
+                      child: Text(
                         label,
+                        maxLines: 1,
                         style: TextStyle(
                           color:
                               isSelected
@@ -123,12 +221,47 @@ class ShellPage extends StatelessWidget {
                           fontSize: 12,
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              );
-            }),
-          ),
+                ],
+              ),
+            );
+          }),
+        ),
+      ),
+    );
+  }
+}
+
+class _MiniButton extends StatelessWidget {
+  final String icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const _MiniButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 60,
+        width: 60,
+        margin: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          color: AppColors.greyBackground,
+          shape: BoxShape.circle,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(icon, width: 20, height: 20),
+            Text(label, style: AppTextStyles.r10, textAlign: TextAlign.center),
+          ],
         ),
       ),
     );
